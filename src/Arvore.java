@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Arvore {
 
     private No raiz;
@@ -7,41 +10,27 @@ public class Arvore {
     }
 
     public void inserirFilho(String conteudo) {
+        No novoNo = criarFilho(conteudo);
 
-        if (raiz.getFilhoEsquerdo() == null) {
-            raiz.setFilhoEsquerdo(criarFilho(conteudo));
-            return;
-        } else if (raiz.getFilhoDireito() == null) {
-            raiz.setFilhoDireito(criarFilho(conteudo));
-            return;
-        }
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
 
-        No atual = raiz.getFilhoEsquerdo();
-        No irmaoAtual = raiz.getFilhoDireito();
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
 
-        while (atual != null || irmaoAtual != null) {
-            if (atual != null) {
-                if (atual.getFilhoEsquerdo() == null) {
-                    atual.setFilhoEsquerdo(criarFilho(conteudo));
-                    return;
-                } else if (atual.getFilhoDireito() == null) {
-                    atual.setFilhoDireito(criarFilho(conteudo));
-                    return;
-                }
+            if (atual.getFilhoEsquerdo() == null) {
+                atual.setFilhoEsquerdo(novoNo);
+                return;
+            } else {
+                fila.add(atual.getFilhoEsquerdo());
             }
 
-            if (irmaoAtual != null) {
-                if (irmaoAtual.getFilhoEsquerdo() == null) {
-                    irmaoAtual.setFilhoEsquerdo(criarFilho(conteudo));
-                    return;
-                } else if (irmaoAtual.getFilhoDireito() == null) {
-                    irmaoAtual.setFilhoDireito(criarFilho(conteudo));
-                    return;
-                }
+            if (atual.getFilhoDireito() == null) {
+                atual.setFilhoDireito(novoNo);
+                return;
+            } else {
+                fila.add(atual.getFilhoDireito());
             }
-
-            atual = atual != null ? atual.getFilhoEsquerdo() : null;
-            irmaoAtual = irmaoAtual != null ? irmaoAtual.getFilhoEsquerdo() : null;
         }
     }
 
@@ -49,24 +38,28 @@ public class Arvore {
         return new No(conteudo);
     }
 
-    public void mostrarArvore() {
-        mostrarArvore(raiz, 0);
+    public int contarNos(No no){
+        if (no == null) return 0;
+        return 1 + contarNos(no.getFilhoEsquerdo()) + contarNos(no.getFilhoDireito());
     }
 
-    private void mostrarArvore(No no, int espaco) {
-        if (no == null) {
-            return;
-        }
+    public void percorrerPreOrdem(No no){
+        if (no == null) return;
+        System.out.println(no.getConteudo() + " ");
+        percorrerPreOrdem(no.getFilhoEsquerdo());
+        percorrerPreOrdem(no.getFilhoDireito());
 
-        int incremento = 5;
-        mostrarArvore(no.getFilhoDireito(), espaco + incremento);
-
-        for (int i = 0; i < espaco; i++) {
-            System.out.print(" ");
-        }
-        System.out.println(no.getConteudo());
-
-        mostrarArvore(no.getFilhoEsquerdo(), espaco + incremento);
     }
 
+    public void percorrerEmOrdem(No no){
+        if(no==null)return;
+        percorrerEmOrdem(no.getFilhoEsquerdo());
+        System.out.println(no.getConteudo() + " ");
+        percorrerEmOrdem(no.getFilhoDireito());
+
+    }
+
+    public No getRaiz() {
+        return raiz;
+    }
 }

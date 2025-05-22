@@ -1,4 +1,4 @@
-public class Main {
+    public class Main {
     public static void main(String[] args) {
 
         Arvore arvore = new Arvore("A");
@@ -8,7 +8,9 @@ public class Main {
         arvore.inserirFilho("E");
         arvore.inserirFilho("F");
 
-        System.out.println("Atenção a árvore está deitada!!");
-        arvore.mostrarArvore();
+//        arvore.contarNos(arvore.getRaiz());
+//        arvore.percorrerPreOrdem(arvore.getRaiz());
+        arvore.percorrerEmOrdem(arvore.getRaiz());
+
     }
 }
