@@ -8,10 +8,27 @@
         arvore.inserirFilho("E");
         arvore.inserirFilho("F");
 
-//        arvore.contarNos(arvore.getRaiz());
-//        arvore.percorrerPreOrdem(arvore.getRaiz());
-//        arvore.percorrerEmOrdem(arvore.getRaiz());
-//        arvore.percorrerEmPosOrdem(arvore.getRaiz());
-        arvore.contarNosSemRecursao(arvore.getRaiz());
+        arvore.contarNos(arvore.getRaiz());
+        System.out.println(" ");
+
+        arvore.contarNosSemRecursao();
+        System.out.println(" ");
+
+        arvore.percorrerPreOrdem(arvore.getRaiz());
+        System.out.println(" ");
+
+        arvore.percorrerPreOrdemSemRecursividade();
+        System.out.println(" ");
+
+        arvore.percorrerEmOrdem(arvore.getRaiz());
+        System.out.println(" ");
+
+        arvore.percorrerEmOrdemSemRecursividade();
+        System.out.println(" ");
+
+        arvore.percorrerEmPosOrdem(arvore.getRaiz());
+        System.out.println(" ");
+
+        arvore.percorrerPosOrdemSemRecursividade();
     }
 }

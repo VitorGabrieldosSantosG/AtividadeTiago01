@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Arvore {
 
@@ -43,46 +44,80 @@ public class Arvore {
         return 1 + contarNos(no.getFilhoEsquerdo()) + contarNos(no.getFilhoDireito());
     }
 
-//    public void contarNosSemRecursao(No no){
-//        int contador= 1;
-//        No atual = no;
-//        Queue<No> fila = new LinkedList<>();
-//        fila.add(no);
-//        while(atual.getFilhoEsquerdo() !=  null && atual.getFilhoDireito() != null){
-//
-//            if(atual.getFilhoEsquerdo() != null){
-//                contador++;
-//                fila.add(atual);
-//                atual = atual.getFilhoEsquerdo();
-//            } else if(atual.getFilhoDireito() != null){
-//                contador++;
-//                fila.add(atual);
-//                atual =atual.getFilhoDireito();
-//            }
-//
-//            if(atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null){
-//                fila.remove();
-//                atual = fila.poll();
-//            }
-//
-//        }
-//        System.out.println(contador);
-//    }
+    public void contarNosSemRecursao(){
+
+        if (raiz == null) return;
+
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
+        int contador = 0;
+
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
+            contador++;
+
+            if (atual.getFilhoEsquerdo() != null) {
+                fila.add(atual.getFilhoEsquerdo());
+            }
+            if (atual.getFilhoDireito() != null) {
+                fila.add(atual.getFilhoDireito());
+            }
+        }
+
+        System.out.println(contador);
+    }
 
     public void percorrerPreOrdem(No no){
         if (no == null) return;
-        System.out.println(no.getConteudo() + " ");
+        System.out.println(no.getConteudo());
         percorrerPreOrdem(no.getFilhoEsquerdo());
         percorrerPreOrdem(no.getFilhoDireito());
 
     }
 
+    public void percorrerPreOrdemSemRecursividade() {
+        if (raiz == null) return;
+
+        Stack<No> pilha = new Stack<>();
+        pilha.push(raiz);
+
+        while (!pilha.isEmpty()) {
+            No atual = pilha.pop();
+            System.out.println(atual.getConteudo());
+
+            if (atual.getFilhoDireito() != null) {
+                pilha.push(atual.getFilhoDireito());
+            }
+            if (atual.getFilhoEsquerdo() != null) {
+                pilha.push(atual.getFilhoEsquerdo());
+            }
+        }
+    }
+
+
     public void percorrerEmOrdem(No no){
         if(no==null)return;
         percorrerEmOrdem(no.getFilhoEsquerdo());
-        System.out.println(no.getConteudo() + " ");
+        System.out.println(no.getConteudo());
         percorrerEmOrdem(no.getFilhoDireito());
 
+    }
+
+    public void percorrerEmOrdemSemRecursividade() {
+        Stack<No> pilha = new Stack<>();
+        No atual = raiz;
+
+        while (atual != null || !pilha.isEmpty()) {
+            while (atual != null) {
+                pilha.push(atual);
+                atual = atual.getFilhoEsquerdo();
+            }
+
+            atual = pilha.pop();
+            System.out.println(atual.getConteudo());
+
+            atual = atual.getFilhoDireito();
+        }
     }
 
     public void percorrerEmPosOrdem(No no){
@@ -91,6 +126,32 @@ public class Arvore {
         percorrerEmPosOrdem(no.getFilhoDireito());
         System.out.println(no.getConteudo());
     }
+
+    public void percorrerPosOrdemSemRecursividade() {
+        if (raiz == null) return;
+
+        Stack<No> pilha1 = new Stack<>();
+        Stack<No> pilha2 = new Stack<>();
+
+        pilha1.push(raiz);
+
+        while (!pilha1.isEmpty()) {
+            No atual = pilha1.pop();
+            pilha2.push(atual);
+
+            if (atual.getFilhoEsquerdo() != null) {
+                pilha1.push(atual.getFilhoEsquerdo());
+            }
+            if (atual.getFilhoDireito() != null) {
+                pilha1.push(atual.getFilhoDireito());
+            }
+        }
+
+        while (!pilha2.isEmpty()) {
+            System.out.println(pilha2.pop().getConteudo());
+        }
+    }
+
 
     public No getRaiz() {
         return raiz;
