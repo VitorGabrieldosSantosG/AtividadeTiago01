@@ -43,6 +43,32 @@ public class Arvore {
         return 1 + contarNos(no.getFilhoEsquerdo()) + contarNos(no.getFilhoDireito());
     }
 
+//    public void contarNosSemRecursao(No no){
+//        int contador= 1;
+//        No atual = no;
+//        Queue<No> fila = new LinkedList<>();
+//        fila.add(no);
+//        while(atual.getFilhoEsquerdo() !=  null && atual.getFilhoDireito() != null){
+//
+//            if(atual.getFilhoEsquerdo() != null){
+//                contador++;
+//                fila.add(atual);
+//                atual = atual.getFilhoEsquerdo();
+//            } else if(atual.getFilhoDireito() != null){
+//                contador++;
+//                fila.add(atual);
+//                atual =atual.getFilhoDireito();
+//            }
+//
+//            if(atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null){
+//                fila.remove();
+//                atual = fila.poll();
+//            }
+//
+//        }
+//        System.out.println(contador);
+//    }
+
     public void percorrerPreOrdem(No no){
         if (no == null) return;
         System.out.println(no.getConteudo() + " ");
@@ -57,6 +83,13 @@ public class Arvore {
         System.out.println(no.getConteudo() + " ");
         percorrerEmOrdem(no.getFilhoDireito());
 
+    }
+
+    public void percorrerEmPosOrdem(No no){
+        if(no == null){return;}
+        percorrerEmPosOrdem(no.getFilhoEsquerdo());
+        percorrerEmPosOrdem(no.getFilhoDireito());
+        System.out.println(no.getConteudo());
     }
 
     public No getRaiz() {

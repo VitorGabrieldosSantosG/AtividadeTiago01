@@ -10,7 +10,8 @@
 
 //        arvore.contarNos(arvore.getRaiz());
 //        arvore.percorrerPreOrdem(arvore.getRaiz());
-        arvore.percorrerEmOrdem(arvore.getRaiz());
-
+//        arvore.percorrerEmOrdem(arvore.getRaiz());
+//        arvore.percorrerEmPosOrdem(arvore.getRaiz());
+        arvore.contarNosSemRecursao(arvore.getRaiz());
     }
 }
