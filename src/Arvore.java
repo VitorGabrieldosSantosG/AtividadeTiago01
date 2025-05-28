@@ -5,6 +5,7 @@ import java.util.Stack;
 public class Arvore {
 
     private No raiz;
+    private int contador = 0;
 
     public Arvore(String conteudo) {
         raiz = new No(conteudo);
@@ -94,7 +95,6 @@ public class Arvore {
         }
     }
 
-
     public void percorrerEmOrdem(No no){
         if(no==null)return;
         percorrerEmOrdem(no.getFilhoEsquerdo());
@@ -150,6 +150,46 @@ public class Arvore {
         while (!pilha2.isEmpty()) {
             System.out.println(pilha2.pop().getConteudo());
         }
+    }
+
+    public void contarNosFolhasRecursivo(){
+        System.out.println(contarNosFolhasRecursivo(getRaiz()));
+    }
+
+    private int contarNosFolhasRecursivo(No no){
+        if(no == null){return contador;}
+        contarNosFolhasRecursivo(no.getFilhoEsquerdo());
+        if(no.getFilhoEsquerdo() == null && no.getFilhoDireito() == null){
+            contador++;
+        }
+        contarNosFolhasRecursivo(no.getFilhoDireito());
+        return contador;
+    }
+
+    public void contarNosFolhaSemRecursao(No no){
+
+        if (raiz == null) return;
+
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
+        int contador = 0;
+
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
+
+            if(atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null){
+                contador++;
+            }
+
+            if (atual.getFilhoEsquerdo() != null) {
+                fila.add(atual.getFilhoEsquerdo());
+            }
+            if (atual.getFilhoDireito() != null) {
+                fila.add(atual.getFilhoDireito());
+            }
+        }
+
+        System.out.println(contador);
     }
 
 

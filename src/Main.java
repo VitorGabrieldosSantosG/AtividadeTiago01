@@ -8,27 +8,30 @@
         arvore.inserirFilho("E");
         arvore.inserirFilho("F");
 
-        arvore.contarNos(arvore.getRaiz());
-        System.out.println(" ");
+//        arvore.contarNos(arvore.getRaiz());
+//        System.out.println(" ");
+//
+//        arvore.contarNosSemRecursao();
+//        System.out.println(" ");
+//
+//        arvore.percorrerPreOrdem(arvore.getRaiz());
+//        System.out.println(" ");
+//
+//        arvore.percorrerPreOrdemSemRecursividade();
+//        System.out.println(" ");
+//
+//        arvore.percorrerEmOrdem(arvore.getRaiz());
+//        System.out.println(" ");
+//
+//        arvore.percorrerEmOrdemSemRecursividade();
+//        System.out.println(" ");
+//
+//        arvore.percorrerEmPosOrdem(arvore.getRaiz());
+//        System.out.println(" ");
+//
+//        arvore.percorrerPosOrdemSemRecursividade();
 
-        arvore.contarNosSemRecursao();
-        System.out.println(" ");
-
-        arvore.percorrerPreOrdem(arvore.getRaiz());
-        System.out.println(" ");
-
-        arvore.percorrerPreOrdemSemRecursividade();
-        System.out.println(" ");
-
-        arvore.percorrerEmOrdem(arvore.getRaiz());
-        System.out.println(" ");
-
-        arvore.percorrerEmOrdemSemRecursividade();
-        System.out.println(" ");
-
-        arvore.percorrerEmPosOrdem(arvore.getRaiz());
-        System.out.println(" ");
-
-        arvore.percorrerPosOrdemSemRecursividade();
+        arvore.contarNosFolhasRecursivo();
+        arvore.contarNosFolhaSemRecursao(arvore.getRaiz());
     }
 }
