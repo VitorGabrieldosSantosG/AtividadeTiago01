@@ -3,13 +3,13 @@ public class No {
     private String conteudo;
     private No filhoEsquerdo;
     private No filhoDireito;
-    private Integer balanceamento;
+    private int balanceamento;
 
     public No(String conteudo) {
         this.conteudo = conteudo;
         this.filhoEsquerdo = null;
         this.filhoDireito = null;
-        this.balanceamento = null;
+        this.balanceamento = 0;
     }
 
     public Integer getBalanceamento() {
