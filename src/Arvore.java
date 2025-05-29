@@ -155,7 +155,7 @@ public class Arvore {
     public void contarNosFolhasRecursivo(){
         System.out.println(contarNosFolhasRecursivo(getRaiz()));
     }
-
+  
     private int contarNosFolhasRecursivo(No no){
         if(no == null){return contador;}
         contarNosFolhasRecursivo(no.getFilhoEsquerdo());
@@ -190,6 +190,7 @@ public class Arvore {
         }
 
         System.out.println(contador);
+        
     }
 
 
