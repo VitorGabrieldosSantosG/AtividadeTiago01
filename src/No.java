@@ -12,6 +12,14 @@ public class No {
         this.balanceamento = null;
     }
 
+    public Integer getBalanceamento() {
+        return balanceamento;
+    }
+
+    public void setBalanceamento(Integer balanceamento) {
+        this.balanceamento = balanceamento;
+    }
+
     public String getConteudo() {
         return conteudo;
     }
