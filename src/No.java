@@ -12,7 +12,7 @@ public class No {
         this.balanceamento = 0;
     }
 
-    public Integer getBalanceamento() {
+    public int getBalanceamento() {
         return balanceamento;
     }
 
