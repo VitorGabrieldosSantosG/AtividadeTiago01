@@ -3,13 +3,13 @@ public class NoAVL {
     private int conteudo;
     private NoAVL filhoEsquerdo;
     private NoAVL filhoDireito;
-    private int balanceamento;
+    private int altura;
 
     public NoAVL(int conteudo) {
         this.conteudo = conteudo;
         this.filhoEsquerdo = null;
         this.filhoDireito = null;
-        this.balanceamento = 0;
+        this.altura = 1;
     }
 
     public int getConteudo() {
@@ -36,12 +36,12 @@ public class NoAVL {
         this.filhoDireito = filhoDireito;
     }
 
-    public int getBalanceamento() {
-        return balanceamento;
+    public int getAltura() {
+        return altura;
     }
 
-    public void setBalanceamento(int balanceamento) {
-        this.balanceamento = balanceamento;
+    public void setAltura(int altura) {
+        this.altura = altura;
     }
 
 

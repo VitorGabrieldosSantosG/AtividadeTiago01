@@ -8,90 +8,122 @@ public class ArvoreAVL {
     }
 
     public void inserirFilho(int conteudo) {
-
-        NoAVL atual = raiz.getFilhoEsquerdo();
-        NoAVL aux = raiz.getFilhoDireito();
-
-        if(calcularAltura(atual, aux) == 0){
-            if(atual.getFilhoEsquerdo() == null){
-                atual.setFilhoEsquerdo(criarFilho(conteudo));
-            } else {
-                atual.setFilhoDireito(criarFilho(conteudo));
-            }
-        }
-        if(calcularAltura(atual, aux) == -1){
-            rotacaoSimpleDireita(atual, conteudo);
-        }
-        if(calcularAltura(atual, aux) == 1){
-            rotacaoDuplaDireitaEsquerda(atual, conteudo);
+        if(raiz == null){
+            raiz = criarFilho(conteudo);
         }
 
+        NoAVL atual = this.raiz;
 
+        if(conteudo > atual.getConteudo()){
+            atual.setFilhoEsquerdo(criarFilho(conteudo));
+        } else if(conteudo < atual.getConteudo()){
+            atual.setFilhoDireito(criarFilho(conteudo));
+        } else {
+            System.out.println("Conteúdo já existente!!");
+            return;
+        }
+
+        atual.setAltura( 1 + Math.max(altura(atual.getFilhoEsquerdo()), altura(atual.getFilhoDireito())));
+
+        int balanceamento = calcularBalanceamento(atual);
+
+        if(calcularBalanceamento(atual) > 1 && atual.getConteudo() < atual.getFilhoEsquerdo().getConteudo()){
+            rotacaoSimpleDireita(atual);
+        }
+
+        if(calcularBalanceamento(atual) < 1 && atual.getConteudo() < atual.getFilhoDireito().getConteudo()){
+            rotacaoSimplesEsquerda(atual);
+        }
+//
+//        if(calcularBalanceamento(atual) > 1 && atual.getConteudo() > atual.getFilhoEsquerdo().getConteudo()){
+//            rotacaoDuplaDireitaEsquerda(atual);
+//        }
+//        if(calcularBalanceamento(atual) < 1 && atual.getConteudo() > atual.getFilhoDireito().getConteudo()){
+//            rotacaoDuplaEsquerdaDireita(atual);
+//        }
 
     }
 
-    public NoAVL criarFilho(int conteudo){
+    public NoAVL criarFilho(int conteudo) {
         return new NoAVL(conteudo);
     }
 
-    public void rotacaoSimpleDireita(NoAVL atual, int conteudo){
+    private int altura(NoAVL no) {
+        return (no == null) ? 0 : no.getAltura();
+    }
 
-        while(atual != null){
-            rotacaoSimpleDireita(atual, conteudo);
-            if(atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null){
-                atual.setFilhoDireito(criarFilho(conteudo));
-                break;
-            }
-            atual = atual.getFilhoDireito();
+
+    public void rotacaoSimpleDireita(NoAVL atual) {
+        rotacaoSimpleDireita(atual.getFilhoDireito());
+        if (atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null) {
+            atual.setFilhoDireito(criarFilho(atual.getConteudo()));
         }
     }
 
-    public void rotacaoSimplesEsquerda(NoAVL atual, int conteudo){
+    public void rotacaoSimplesEsquerda(NoAVL atual) {
 
-        while(atual != null){
-            rotacaoSimplesEsquerda(atual, conteudo);
-            if(atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null){
-                atual.setFilhoEsquerdo(criarFilho(conteudo));
-                break;
-            }
-            atual = atual.getFilhoEsquerdo();
+        rotacaoSimplesEsquerda(atual.getFilhoEsquerdo());
+        if (atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null) {
+            atual.setFilhoEsquerdo(criarFilho(atual.getConteudo()));
         }
 
+
     }
 
-    public void rotacaoDuplaEsquerdaDireita(NoAVL atual, int conteudo){
-        while(atual != null){
-            if(atual.getFilhoEsquerdo() != null){
-                rotacaoDuplaEsquerdaDireita(atual, conteudo);
-                atual = atual.getFilhoEsquerdo();
-            }
-            if(atual.getFilhoDireito() != null){
-                rotacaoDuplaEsquerdaDireita(atual, conteudo);
-                atual= atual.getFilhoDireito();
-            }
-            atual.setFilhoDireito(criarFilho(conteudo));
-        }
+//    public void rotacaoDuplaEsquerdaDireita(NoAVL atual) {
+//        if (atual.getFilhoEsquerdo() != null) {
+//            rotacaoDuplaEsquerdaDireita(atual.getFilhoEsquerdo());
+//        }
+//        if (atual.getFilhoDireito() != null) {
+//            rotacaoDuplaEsquerdaDireita(atual.getFilhoDireito());
+//        }
+//        atual.setFilhoDireito(criarFilho(atual.getConteudo()));
+//    }
+//
+//
+//    public void rotacaoDuplaDireitaEsquerda(NoAVL atual) {
+//        if (atual.getFilhoDireito() != null) {
+//            rotacaoDuplaEsquerdaDireita(atual);
+//            atual = atual.getFilhoDireito();
+//        }
+//        if (atual.getFilhoEsquerdo() != null) {
+//            rotacaoDuplaEsquerdaDireita(atual);
+//            atual = atual.getFilhoEsquerdo();
+//        }
+//        atual.setFilhoEsquerdo(criarFilho(atual.getConteudo()));
+//    }
+
+    private int calcularBalanceamento(NoAVL no) {
+        return (no == null) ? 0 : altura(no.getFilhoEsquerdo()) - altura(no.getFilhoDireito());
     }
 
-    public void rotacaoDuplaDireitaEsquerda(NoAVL atual, int conteudo){
-        while(atual != null){
-            if(atual.getFilhoDireito() != null){
-                rotacaoDuplaEsquerdaDireita(atual, conteudo);
-                atual= atual.getFilhoDireito();
-            }
-            if(atual.getFilhoEsquerdo() != null){
-                rotacaoDuplaEsquerdaDireita(atual, conteudo);
-                atual = atual.getFilhoEsquerdo();
-            }
-            atual.setFilhoEsquerdo(criarFilho(conteudo));
-        }
-    }
-
-    public int calcularAltura(NoAVL no1, NoAVL no2){
-        return no1.getBalanceamento() - no2.getBalanceamento();
-    }
 
     public NoAVL getRaiz() {
         return raiz;
     }
+
+    public void percorrerPreOrdem(NoAVL no){
+        if (no == null) return;
+        System.out.println(no.getConteudo());
+        percorrerPreOrdem(no.getFilhoEsquerdo());
+        percorrerPreOrdem(no.getFilhoDireito());
+
+    }
+
+    public NoAVL buscar(int conteudo) {
+        NoAVL atual = raiz;
+
+        while (atual != null) {
+            if (conteudo == atual.getConteudo()) {
+                return atual;
+            } else if (conteudo < atual.getConteudo()) {
+                atual = atual.getFilhoEsquerdo();
+            } else {
+                atual = atual.getFilhoDireito();
+            }
+        }
+
+        return null;
+    }
+
 }
