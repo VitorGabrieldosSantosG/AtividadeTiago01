@@ -126,4 +126,33 @@ public class ArvoreAVL {
         return null;
     }
 
+    //Código para estudar:
+
+//    private NoAVL rotacaoDireita(NoAVL y) {
+//        NoAVL x = y.esquerdo;
+//        NoAVL T2 = x.direito;
+//
+//        x.direito = y;
+//        y.esquerdo = T2;
+//
+//        y.altura = 1 + Math.max(altura(y.esquerdo), altura(y.direito));
+//        x.altura = 1 + Math.max(altura(x.esquerdo), altura(x.direito));
+//
+//        return x;
+//    }
+//
+//    private NoAVL rotacaoEsquerda(NoAVL x) {
+//        NoAVL y = x.direito;
+//        NoAVL T2 = y.esquerdo;
+//
+//        y.esquerdo = x;
+//        x.direito = T2;
+//
+//        x.altura = 1 + Math.max(altura(x.esquerdo), altura(x.direito));
+//        y.altura = 1 + Math.max(altura(y.esquerdo), altura(y.direito));
+//
+//        return y;
+//    }
+
+
 }
