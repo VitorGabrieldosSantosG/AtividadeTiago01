@@ -7,20 +7,18 @@ public class ArvoreAVL {
         raiz = new NoAVL(conteudo);
     }
 
-    public void inserirFilho(int conteudo) {
+    public NoAVL inserirFilho(NoAVL atual,int conteudo) {
         if(raiz == null){
             raiz = criarFilho(conteudo);
         }
 
-        NoAVL atual = this.raiz;
-
         if(conteudo > atual.getConteudo()){
-            atual.setFilhoEsquerdo(criarFilho(conteudo));
+            atual.setFilhoEsquerdo(inserirFilho(atual.getFilhoEsquerdo(),conteudo));
         } else if(conteudo < atual.getConteudo()){
-            atual.setFilhoDireito(criarFilho(conteudo));
+            atual.setFilhoDireito(inserirFilho(atual.getFilhoDireito(), conteudo));
         } else {
             System.out.println("Conteúdo já existente!!");
-            return;
+            return atual;
         }
 
         atual.setAltura( 1 + Math.max(altura(atual.getFilhoEsquerdo()), altura(atual.getFilhoDireito())));
@@ -28,20 +26,23 @@ public class ArvoreAVL {
         int balanceamento = calcularBalanceamento(atual);
 
         if(calcularBalanceamento(atual) > 1 && atual.getConteudo() < atual.getFilhoEsquerdo().getConteudo()){
-            rotacaoSimpleDireita(atual);
+            return rotacaoDireita(atual);
         }
 
-        if(calcularBalanceamento(atual) < 1 && atual.getConteudo() < atual.getFilhoDireito().getConteudo()){
-            rotacaoSimplesEsquerda(atual);
+        if(calcularBalanceamento(atual) < - 1 && atual.getConteudo() < atual.getFilhoDireito().getConteudo()){
+            return rotacaoEsquerda(atual);
         }
-//
-//        if(calcularBalanceamento(atual) > 1 && atual.getConteudo() > atual.getFilhoEsquerdo().getConteudo()){
-//            rotacaoDuplaDireitaEsquerda(atual);
-//        }
-//        if(calcularBalanceamento(atual) < 1 && atual.getConteudo() > atual.getFilhoDireito().getConteudo()){
-//            rotacaoDuplaEsquerdaDireita(atual);
-//        }
 
+        if(calcularBalanceamento(atual) > 1 && atual.getConteudo() > atual.getFilhoEsquerdo().getConteudo()){
+            atual.setFilhoEsquerdo(rotacaoEsquerda(atual.getFilhoEsquerdo()));
+            return rotacaoDireita(atual);
+
+        }
+        if(calcularBalanceamento(atual) < -1 && atual.getConteudo() > atual.getFilhoDireito().getConteudo()){
+            atual.setFilhoDireito(rotacaoDireita(atual.getFilhoDireito()));
+            return rotacaoEsquerda(atual);
+        }
+        return atual;
     }
 
     public NoAVL criarFilho(int conteudo) {
@@ -52,46 +53,7 @@ public class ArvoreAVL {
         return (no == null) ? 0 : no.getAltura();
     }
 
-
-    public void rotacaoSimpleDireita(NoAVL atual) {
-        rotacaoSimpleDireita(atual.getFilhoDireito());
-        if (atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null) {
-            atual.setFilhoDireito(criarFilho(atual.getConteudo()));
-        }
-    }
-
-    public void rotacaoSimplesEsquerda(NoAVL atual) {
-
-        rotacaoSimplesEsquerda(atual.getFilhoEsquerdo());
-        if (atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null) {
-            atual.setFilhoEsquerdo(criarFilho(atual.getConteudo()));
-        }
-
-
-    }
-
-//    public void rotacaoDuplaEsquerdaDireita(NoAVL atual) {
-//        if (atual.getFilhoEsquerdo() != null) {
-//            rotacaoDuplaEsquerdaDireita(atual.getFilhoEsquerdo());
-//        }
-//        if (atual.getFilhoDireito() != null) {
-//            rotacaoDuplaEsquerdaDireita(atual.getFilhoDireito());
-//        }
-//        atual.setFilhoDireito(criarFilho(atual.getConteudo()));
-//    }
-//
-//
-//    public void rotacaoDuplaDireitaEsquerda(NoAVL atual) {
-//        if (atual.getFilhoDireito() != null) {
-//            rotacaoDuplaEsquerdaDireita(atual);
-//            atual = atual.getFilhoDireito();
-//        }
-//        if (atual.getFilhoEsquerdo() != null) {
-//            rotacaoDuplaEsquerdaDireita(atual);
-//            atual = atual.getFilhoEsquerdo();
-//        }
-//        atual.setFilhoEsquerdo(criarFilho(atual.getConteudo()));
-//    }
+    //ADICIONAR EXCLUSÃO
 
     private int calcularBalanceamento(NoAVL no) {
         return (no == null) ? 0 : altura(no.getFilhoEsquerdo()) - altura(no.getFilhoDireito());
@@ -127,32 +89,34 @@ public class ArvoreAVL {
     }
 
     //Código para estudar:
+//inverte A POSIÇÃO DO X PARA A DO Y
+    // Y - X(ESQ) -T2(DIR DO X)
+    private NoAVL rotacaoDireita(NoAVL y) {
+        NoAVL x = y.getFilhoEsquerdo();
+        NoAVL T2 = x.getFilhoDireito();
 
-//    private NoAVL rotacaoDireita(NoAVL y) {
-//        NoAVL x = y.esquerdo;
-//        NoAVL T2 = x.direito;
-//
-//        x.direito = y;
-//        y.esquerdo = T2;
-//
-//        y.altura = 1 + Math.max(altura(y.esquerdo), altura(y.direito));
-//        x.altura = 1 + Math.max(altura(x.esquerdo), altura(x.direito));
-//
-//        return x;
-//    }
-//
-//    private NoAVL rotacaoEsquerda(NoAVL x) {
-//        NoAVL y = x.direito;
-//        NoAVL T2 = y.esquerdo;
-//
-//        y.esquerdo = x;
-//        x.direito = T2;
-//
-//        x.altura = 1 + Math.max(altura(x.esquerdo), altura(x.direito));
-//        y.altura = 1 + Math.max(altura(y.esquerdo), altura(y.direito));
-//
-//        return y;
-//    }
+        x.setFilhoDireito(y);
+        y.setFilhoEsquerdo(T2);
+
+        y.setAltura( 1 + Math.max(altura(y.getFilhoEsquerdo()), altura(y.getFilhoDireito())));
+        x.setAltura(1 + Math.max(altura(x.getFilhoEsquerdo()), altura(x.getFilhoDireito())));
+
+        return x;
+    }
+
+    private NoAVL rotacaoEsquerda(NoAVL x) {
+        NoAVL y = x.getFilhoDireito();
+        NoAVL T2 = y.getFilhoEsquerdo();
+
+        y.setFilhoEsquerdo(x);
+        x.setFilhoDireito(T2);
+
+        x.setAltura( 1 + Math.max(altura(x.getFilhoEsquerdo()), altura(x.getFilhoDireito())));
+        y.setAltura(1 + Math.max(altura(y.getFilhoEsquerdo()), altura(y.getFilhoDireito())));
+
+        return y;
+    }
+
 
 
 }
