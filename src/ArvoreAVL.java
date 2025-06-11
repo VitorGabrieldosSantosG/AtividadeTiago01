@@ -59,7 +59,6 @@ public class ArvoreAVL {
         return (no == null) ? 0 : altura(no.getFilhoEsquerdo()) - altura(no.getFilhoDireito());
     }
 
-
     public NoAVL getRaiz() {
         return raiz;
     }
@@ -88,9 +87,6 @@ public class ArvoreAVL {
         return null;
     }
 
-    //Código para estudar:
-//inverte A POSIÇÃO DO X PARA A DO Y
-    // Y - X(ESQ) -T2(DIR DO X)
     private NoAVL rotacaoDireita(NoAVL y) {
         NoAVL x = y.getFilhoEsquerdo();
         NoAVL T2 = x.getFilhoDireito();
@@ -116,6 +112,8 @@ public class ArvoreAVL {
 
         return y;
     }
+
+
 
 
 
