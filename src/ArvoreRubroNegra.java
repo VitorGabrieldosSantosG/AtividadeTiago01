@@ -1,116 +1,94 @@
 public class ArvoreRubroNegra {
 
-        private NoRubroNegra raiz;
+        private NoRubroNegra root;
+        private final NoRubroNegra NIL;
 
-        public ArvoreRubroNegra(int conteudo) {
-            raiz = new NoRubroNegra(conteudo);
+        public ArvoreRubroNegra() {
+            NIL = new NoRubroNegra(-1);
+            NIL.color = Color.BLACK;
+            NIL.left = NIL.right = NIL.parent = null;
+            root = NIL;
         }
 
-    public void inserir(int conteudo) {
-        NoRubroNegra novo = new NoRubroNegra(conteudo);
-        raiz = inserir(raiz, novo);
-        corrigirInsercao(novo);
-    }
+        private void leftRotate(NoRubroNegra x){
+            NoRubroNegra y = x.right;
+            x.right = y.left;
 
-    private NoRubroNegra inserir(NoRubroNegra atual, NoRubroNegra novo) {
-        if (atual == null) return novo;
+            if(y.left != NIL) y.left.parent = x;
 
-        if (novo.getConteudo() < atual.getConteudo()) {
-            atual.setFilhoEsquerdo(inserir(atual.getFilhoEsquerdo(), novo));
-            atual.getFilhoEsquerdo().setPai(atual);
-        } else if (novo.getConteudo() > atual.getConteudo()) {
-            atual.setFilhoDireito(inserir(atual.getFilhoDireito(), novo));
-            atual.getFilhoDireito().setPai(atual);
+            y.parent = x.parent;
+
+            if(x.parent == null) root = y;
+            else if (x == x.parent.left) x.parent.left = y;
+            else x.parent.right = y;
+
+            y.left = x;
+            x.parent = y;
+
         }
 
-        return atual;
-    }
+        private void rightRotate(NoRubroNegra y){
+            NoRubroNegra x = y.left;
+            y.left = x.right;
+            if(x.right != NIL) x.right.parent = y;
 
-    private void corrigirInsercao(NoRubroNegra no) {
-        while (no != raiz && no.getPai().ehVermelho()) {
-            NoRubroNegra pai = no.getPai();
-            NoRubroNegra avo = pai.getPai();
+            x.parent = y.parent;
 
-            if (pai == avo.getFilhoEsquerdo()) {
-                NoRubroNegra tio = avo.getFilhoDireito();
+            if(y.parent == null) root = x;
+            else if (y ==y.parent.right) y.parent.right =x;
+            else y.parent.left = x;
 
-                if (tio != null && tio.verificaVermelho()) {
-                    pai.setCor("preto");
-                    tio.setCor("preto");
-                    avo.setCor("vermelho");
-                    no = avo;
-                } else {
-                    if (no == pai.getFilhoDireito()) {
-                        no = pai;
-                        rotacaoEsquerda(no);
+            x.right = y;
+            y.parent = x;
+
+        }
+
+        public void insert(int key){
+            NoRubroNegra node = new NoRubroNegra(key);
+            node.left = node.right = node.parent = null;
+
+            NoRubroNegra y =null;
+            NoRubroNegra x = root;
+
+            while(x!= NIL){
+                 y = x ;
+                 if(node.key < x.key) x = x.left;
+                 else x = x.right;
+            }
+
+            node.parent = y;
+            if(y == null) root = node;
+            else if(node.key < y.key) x =x.left;
+            else y.right = node;
+
+            node.left = NIL;
+            node.right = NIL;
+            node.color = Color.RED;
+
+            insertFix(node);
+        }
+
+         private void insertFix(NoRubroNegra k){
+            while(k.parent != null && k.parent.color == Color.RED){
+                if(k.parent == k.parent.parent.left){
+                    NoRubroNegra u = k.parent.parent.right;
+                    if(u.color == Color.RED){
+                        k.parent.color = Color.BLACK;
+                        u.color = Color.BLACK;
+                        k.parent.parent.color = Color.RED;
+                        k = k.parent.parent;
+                    } else {
+                        if( k == k.parent.right){
+                            k = k.parent;
+                            leftRotate(k);
+                        }
+                        k.parent.color = Color.BLACK;
+                        k.parent.parent.color = Color.RED;
+                        rightRotate(k.parent.parent);
                     }
-                    pai.setCor("preto");
-                    avo.setCor("vermelho");
-                    rotacaoDireita(avo);
-                }
-            } else {
-                NoRubroNegra tio = avo.getFilhoEsquerdo();
-
-                if (tio != null && tio.verificaVermelho()) {
-                    pai.setCor("preto");
-                    tio.setCor("preto");
-                    avo.setCor("vermelho");
-                    no = avo;
-                } else {
-                    if (no == pai.getFilhoEsquerdo()) {
-                        no = pai;
-                        rotacaoDireita(no);
-                    }
-                    pai.setCor("preto");
-                    avo.setCor("vermelho");
-                    rotacaoEsquerda(avo);
                 }
             }
-        }
-        raiz.setCor("preto");
-    }
-
-    private void rotacaoEsquerda(NoRubroNegra x) {
-        NoRubroNegra y = x.getFilhoDireito();
-        x.setFilhoDireito(y.getFilhoEsquerdo());
-        if (y.getFilhoEsquerdo() != null)
-            y.getFilhoEsquerdo().setPai(x);
-
-        y.setPai(x.getPai());
-
-        if (x.getPai() == null)
-            raiz = y;
-        else if (x == x.getPai().getFilhoEsquerdo())
-            x.getPai().setFilhoEsquerdo(y);
-        else
-            x.getPai().setFilhoDireito(y);
-
-        y.setFilhoEsquerdo(x);
-        x.setPai(y);
-    }
-
-    private void rotacaoDireita(NoRubroNegra y) {
-        NoRubroNegra x = y.getFilhoEsquerdo();
-        y.setFilhoEsquerdo(x.getFilhoDireito());
-        if (x.getFilhoDireito() != null)
-            x.getFilhoDireito().setPai(y);
-
-        x.setPai(y.getPai());
-
-        if (y.getPai() == null)
-            raiz = x;
-        else if (y == y.getPai().getFilhoEsquerdo())
-            y.getPai().setFilhoEsquerdo(x);
-        else
-            y.getPai().setFilhoDireito(x);
-
-        x.setFilhoDireito(y);
-        y.setPai(x);
-    }
-
-
-
-
+         }
 
 
 
