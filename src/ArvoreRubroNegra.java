@@ -1,117 +1,112 @@
 public class ArvoreRubroNegra {
 
         private NoRubroNegra raiz;
-        private int contador = 0;
 
         public ArvoreRubroNegra(int conteudo) {
             raiz = new NoRubroNegra(conteudo);
         }
 
-        public NoRubroNegra inserirFilho(NoRubroNegra atual,int conteudo) {
-            if(raiz == null){
-                raiz = criarFilho(conteudo);
-            }
+    public void inserir(int conteudo) {
+        NoRubroNegra novo = new NoRubroNegra(conteudo);
+        raiz = inserir(raiz, novo);
+        corrigirInsercao(novo);
+    }
 
-            if(conteudo > atual.getConteudo()){
-                atual.setFilhoEsquerdo(inserirFilho(atual.getFilhoEsquerdo(),conteudo));
-            } else if(conteudo < atual.getConteudo()){
-                atual.setFilhoDireito(inserirFilho(atual.getFilhoDireito(), conteudo));
-            } else {
-                System.out.println("Conteúdo já existente!!");
-                return atual;
-            }
+    private NoRubroNegra inserir(NoRubroNegra atual, NoRubroNegra novo) {
+        if (atual == null) return novo;
 
-            atual.setAltura( 1 + Math.max(altura(atual.getFilhoEsquerdo()), altura(atual.getFilhoDireito())));
-
-            int balanceamento = calcularBalanceamento(atual);
-
-            if(calcularBalanceamento(atual) > 1 && atual.getConteudo() < atual.getFilhoEsquerdo().getConteudo()){
-                return rotacaoDireita(atual);
-            }
-
-            if(calcularBalanceamento(atual) < - 1 && atual.getConteudo() < atual.getFilhoDireito().getConteudo()){
-                return rotacaoEsquerda(atual);
-            }
-
-            if(calcularBalanceamento(atual) > 1 && atual.getConteudo() > atual.getFilhoEsquerdo().getConteudo()){
-                atual.setFilhoEsquerdo(rotacaoEsquerda(atual.getFilhoEsquerdo()));
-                return rotacaoDireita(atual);
-
-            }
-            if(calcularBalanceamento(atual) < -1 && atual.getConteudo() > atual.getFilhoDireito().getConteudo()){
-                atual.setFilhoDireito(rotacaoDireita(atual.getFilhoDireito()));
-                return rotacaoEsquerda(atual);
-            }
-            return atual;
+        if (novo.getConteudo() < atual.getConteudo()) {
+            atual.setFilhoEsquerdo(inserir(atual.getFilhoEsquerdo(), novo));
+            atual.getFilhoEsquerdo().setPai(atual);
+        } else if (novo.getConteudo() > atual.getConteudo()) {
+            atual.setFilhoDireito(inserir(atual.getFilhoDireito(), novo));
+            atual.getFilhoDireito().setPai(atual);
         }
 
-        public NoRubroNegra criarFilho(int conteudo) {
-            return new NoRubroNegra(conteudo);
-        }
+        return atual;
+    }
 
-        private int altura(NoRubroNegra no) {
-            return (no == null) ? 0 : no.getAltura();
-        }
+    private void corrigirInsercao(NoRubroNegra no) {
+        while (no != raiz && no.getPai().ehVermelho()) {
+            NoRubroNegra pai = no.getPai();
+            NoRubroNegra avo = pai.getPai();
 
-        //ADICIONAR EXCLUSÃO
+            if (pai == avo.getFilhoEsquerdo()) {
+                NoRubroNegra tio = avo.getFilhoDireito();
 
-        private int calcularBalanceamento(NoRubroNegra no) {
-            return (no == null) ? 0 : altura(no.getFilhoEsquerdo()) - altura(no.getFilhoDireito());
-        }
-
-        public NoRubroNegra getRaiz() {
-            return raiz;
-        }
-
-        public void percorrerPreOrdem(NoRubroNegra no){
-            if (no == null) return;
-            System.out.println(no.getConteudo());
-            percorrerPreOrdem(no.getFilhoEsquerdo());
-            percorrerPreOrdem(no.getFilhoDireito());
-
-        }
-
-        public NoRubroNegra buscar(int conteudo) {
-            NoRubroNegra atual = raiz;
-
-            while (atual != null) {
-                if (conteudo == atual.getConteudo()) {
-                    return atual;
-                } else if (conteudo < atual.getConteudo()) {
-                    atual = atual.getFilhoEsquerdo();
+                if (tio != null && tio.verificaVermelho()) {
+                    pai.setCor("preto");
+                    tio.setCor("preto");
+                    avo.setCor("vermelho");
+                    no = avo;
                 } else {
-                    atual = atual.getFilhoDireito();
+                    if (no == pai.getFilhoDireito()) {
+                        no = pai;
+                        rotacaoEsquerda(no);
+                    }
+                    pai.setCor("preto");
+                    avo.setCor("vermelho");
+                    rotacaoDireita(avo);
+                }
+            } else {
+                NoRubroNegra tio = avo.getFilhoEsquerdo();
+
+                if (tio != null && tio.verificaVermelho()) {
+                    pai.setCor("preto");
+                    tio.setCor("preto");
+                    avo.setCor("vermelho");
+                    no = avo;
+                } else {
+                    if (no == pai.getFilhoEsquerdo()) {
+                        no = pai;
+                        rotacaoDireita(no);
+                    }
+                    pai.setCor("preto");
+                    avo.setCor("vermelho");
+                    rotacaoEsquerda(avo);
                 }
             }
-
-            return null;
         }
+        raiz.setCor("preto");
+    }
 
-        private NoRubroNegra rotacaoDireita(NoRubroNegra y) {
-            NoRubroNegra x = y.getFilhoEsquerdo();
-            NoRubroNegra T2 = x.getFilhoDireito();
+    private void rotacaoEsquerda(NoRubroNegra x) {
+        NoRubroNegra y = x.getFilhoDireito();
+        x.setFilhoDireito(y.getFilhoEsquerdo());
+        if (y.getFilhoEsquerdo() != null)
+            y.getFilhoEsquerdo().setPai(x);
 
-            x.setFilhoDireito(y);
-            y.setFilhoEsquerdo(T2);
+        y.setPai(x.getPai());
 
-            y.setAltura( 1 + Math.max(altura(y.getFilhoEsquerdo()), altura(y.getFilhoDireito())));
-            x.setAltura(1 + Math.max(altura(x.getFilhoEsquerdo()), altura(x.getFilhoDireito())));
+        if (x.getPai() == null)
+            raiz = y;
+        else if (x == x.getPai().getFilhoEsquerdo())
+            x.getPai().setFilhoEsquerdo(y);
+        else
+            x.getPai().setFilhoDireito(y);
 
-            return x;
-        }
+        y.setFilhoEsquerdo(x);
+        x.setPai(y);
+    }
 
-        private NoRubroNegra rotacaoEsquerda(NoRubroNegra x) {
-            NoRubroNegra y = x.getFilhoDireito();
-            NoRubroNegra T2 = y.getFilhoEsquerdo();
+    private void rotacaoDireita(NoRubroNegra y) {
+        NoRubroNegra x = y.getFilhoEsquerdo();
+        y.setFilhoEsquerdo(x.getFilhoDireito());
+        if (x.getFilhoDireito() != null)
+            x.getFilhoDireito().setPai(y);
 
-            y.setFilhoEsquerdo(x);
-            x.setFilhoDireito(T2);
+        x.setPai(y.getPai());
 
-            x.setAltura( 1 + Math.max(altura(x.getFilhoEsquerdo()), altura(x.getFilhoDireito())));
-            y.setAltura(1 + Math.max(altura(y.getFilhoEsquerdo()), altura(y.getFilhoDireito())));
+        if (y.getPai() == null)
+            raiz = x;
+        else if (y == y.getPai().getFilhoEsquerdo())
+            y.getPai().setFilhoEsquerdo(x);
+        else
+            y.getPai().setFilhoDireito(x);
 
-            return y;
-        }
+        x.setFilhoDireito(y);
+        y.setPai(x);
+    }
 
 
 
